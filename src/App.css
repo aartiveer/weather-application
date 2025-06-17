@@ -1,6 +1,6 @@
 .App {
   text-align: center;
-  background-color:yellowgreen;
+  background-color:lch(98.54% 0.35 201.26);
 }
 
 .back-btn {
@@ -37,6 +37,13 @@
 
 .weather-info {
   margin-top: 20px;
+  text-align: center;
 }
-
+.days h3 {
+  text-size-adjust: 20px ;
+}
+.days img {
+  height: 50%;
+  width: 50%;
+}
 

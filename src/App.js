@@ -6,28 +6,32 @@ import strom from './asset/storm.png';
 import sun from './asset/sun.png';
 
 import './App.css';
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import axios from 'axios';
 
 function App() {
-  const [city, setCity] = useState("");
+  const [city, setCity] = useState("Pune");
   const [weather, setWeather] = useState(null);
   const [forecast, setForecast] = useState([]);
   const [error, setError] = useState("");
+
+  useEffect(() => {
+    fetchWeather("Pune");
+  }, []);
 
   const handleCityChange = (event) => {
     setCity(event.target.value);
   };
 
-  const fetchWeather = async () => {
-    if (!city.trim()) {
+  const fetchWeather = async (cityName = city) => {
+    if (!cityName.trim()) {
       setError("Please enter a city name.");
       return;
     }
 
     try {
       const response = await axios.get(
-        `https://api.openweathermap.org/data/2.5/forecast?q=${city}&appid=9ae2200eb82722de0ffc52f3ea098a71`
+        `https://api.openweathermap.org/data/2.5/forecast?q=${cityName}&appid=9ae2200eb82722de0ffc52f3ea098a71`
       );
       setWeather(response.data);
       setForecast(groupWeatherIntoDays(response.data));
@@ -41,8 +45,6 @@ function App() {
 
   function groupWeatherIntoDays(data) {
     const forecastByDay = {};
-
-    // Local icon mapping based on weather type
     const iconMap = {
       Clear: sun,
       Clouds: cloudy,
@@ -81,8 +83,8 @@ function App() {
       const day = forecastByDay[key];
       const maxTemp = Math.max(...day.temps);
       const minTemp = Math.min(...day.temps);
-      const main = day.mains[0]; // pick first or most frequent
-      const icon = iconMap[main] || clouds; // fallback icon
+      const main = day.mains[0];
+      const icon = iconMap[main] || clouds;
 
       return {
         date: day.dateLabel,
@@ -95,7 +97,7 @@ function App() {
 
   return (
     <div className="App">
-      <h1>Weather</h1>
+      <h1><i><b>Weather Application</b></i></h1>
 
       <button className="setting-btn">
         <img src={setting} alt="Settings" />
@@ -108,9 +110,9 @@ function App() {
         value={city}
         onChange={handleCityChange}
       />
-      <button onClick={fetchWeather}>Get Weather</button>
+      <button onClick={() => fetchWeather()}>Get Weather</button>
 
-      {error && <p style={{ color: 'red' }}>{error}</p>}
+      {error && <p className="error">{error}</p>}
 
       {weather && (
         <div className="weather-info">
@@ -121,8 +123,8 @@ function App() {
 
       <div className="days">
         {forecast.map((day, index) => (
-          <div key={index}>
-            <h3><b>{index === 0 ? "Today" : day.date.split(' ')[0]}</b></h3>
+          <div className="card" key={index}>
+            <h3>{index === 0 ? "Today" : day.date.split(' ')[0]}</h3>
             <h6>{day.date}</h6>
             <img src={day.icon} alt="Weather Icon" />
             <p>{day.max}°C / {day.min}°C</p>
@@ -130,7 +132,7 @@ function App() {
         ))}
       </div>
 
-      {forecast.length > 0 && <p>Mostly Cloudy with a 40% chance of precipitation</p>}
+      {forecast.length > 0 && <p className="summary">Mostly Cloudy with a 40% chance of precipitation</p>}
     </div>
   );
 }

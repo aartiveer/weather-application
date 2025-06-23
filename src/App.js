@@ -123,7 +123,7 @@ function App() {
 
       <div className="days">
         {forecast.map((day, index) => (
-          <div className="card" key={index}>
+          <div key={index}>
             <h3>{index === 0 ? "Today" : day.date.split(' ')[0]}</h3>
             <h6>{day.date}</h6>
             <img src={day.icon} alt="Weather Icon" />
@@ -131,8 +131,6 @@ function App() {
           </div>
         ))}
       </div>
-
-      {forecast.length > 0 && <p className="summary">Mostly Cloudy with a 40% chance of precipitation</p>}
     </div>
   );
 }

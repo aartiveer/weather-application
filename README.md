@@ -21,7 +21,7 @@ A modern, intuitive weather forecasting app built using **React** and powered by
 
 ## 📸 Preview
 
-![App Screenshot](src/asset/demo.png)
+![App Screenshot](src/asset/demo.PNG)
 
 ---
 
